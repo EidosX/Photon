@@ -8,8 +8,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->mainImg->setPath("C:/Users/Eidos/Pictures/backiee-138908-landscape-scaled.jpg");
-    for (int i = 0; i < 5; ++i)
-        ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Pictures/backiee-138908-landscape-scaled.jpg"));
+    ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Pictures/backiee-138908-landscape-scaled.jpg"));
+    ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Desktop/cc.png"));
+    ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Pictures/backiee-138908-landscape-scaled.jpg", true));
+    ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Desktop/cc.png"));
     ui->carouselLayout->addStretch();
 }
 
