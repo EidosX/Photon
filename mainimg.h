@@ -2,12 +2,13 @@
 #define MAINIMG_H
 
 #include <QWidget>
+#include "appstate.h"
 
 class MainImg : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MainImg(QWidget *parent = nullptr);
+    explicit MainImg(AppState& appState, QWidget *parent = nullptr);
 
     void setPath(QString path);
 
@@ -17,6 +18,7 @@ signals:
 
 private:
     std::optional<QPixmap> _img = {};
+    AppState& _appState;
 };
 
 #endif // MAINIMG_H

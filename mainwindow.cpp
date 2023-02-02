@@ -1,18 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "previewimg.h"
+#include "mainimg.h"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(AppState& appState, QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow), _appState(appState)
 {
     ui->setupUi(this);
-    ui->mainImg->setPath("C:/Users/Eidos/Pictures/backiee-138908-landscape-scaled.jpg");
-    ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Pictures/backiee-138908-landscape-scaled.jpg"));
-    ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Desktop/cc.png"));
-    ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Pictures/backiee-138908-landscape-scaled.jpg", true));
-    ui->carouselLayout->addWidget(new PreviewImg("C:/Users/Eidos/Desktop/cc.png"));
-    ui->carouselLayout->addStretch();
+    ui->mainHorizontalLayout->insertWidget(0, new MainImg(_appState, this));
+
+    connect(&appState, &AppState::onFilteredImagePathsChanged, this, &MainWindow::reloadCarousel);
+
+    reloadCarousel();
+    appState.setSelectedImage(appState.getFilteredImages()[3]);
 }
 
 MainWindow::~MainWindow()
@@ -20,3 +21,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::reloadCarousel() {
+    while (QWidget* w = ui->carouselScroll->findChild<PreviewImg*>())
+        delete w;
+
+    for (const auto& img : _appState.getFilteredImages()) {
+        auto* w = new PreviewImg(img, _appState, this);
+        ui->carouselLayout->addWidget(w);
+    }
+    ui->carouselLayout->addStretch(0);
+    emit _appState.onSelectedImageChanged();
+}
