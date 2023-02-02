@@ -18,6 +18,7 @@ SOURCES += \
     previewimg.cpp
 
 HEADERS += \
+    Star.h \
     appstate.h \
     carousel.h \
     db.h \
@@ -32,3 +33,8 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
+
+RESOURCES += \
+    resources.qrc

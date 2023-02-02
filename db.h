@@ -12,7 +12,7 @@ struct Image {
 
     QString path;
     std::vector<QString> tags;
-    int rating;
+    int rating = 0;
 };
 
 class Database : public QObject {
@@ -20,10 +20,12 @@ class Database : public QObject {
 public:
     // Returns all the images in the database that match the given filters
     virtual std::vector<Image> query(const std::vector<Filter>& filters) = 0;
+    virtual Image queryByPath(QString path) = 0;
 
 public slots:
     virtual void addImage(const Image& img) = 0;
     virtual void removeImage(const QString& path) = 0;
+    virtual void setRating(QString path, int rating) = 0;
 };
 
 class VectorDatabase : public Database {
@@ -37,12 +39,21 @@ public:
         }
         return l;
     }
+    inline Image queryByPath(QString path) override { return queryRefByPath(path); }
+    inline Image& queryRefByPath(QString path) {
+        for (Image& img : _images) if (img.path == path) return img;
+        throw std::runtime_error("Path not found");
+    }
 
 public slots:
-    inline void addImage(const Image& img) override { _images.push_back(img); }
+    inline void addImage(const Image& img) override {
+        if (std::any_of(_images.begin(), _images.end(), [&](Image& x){return x.path == img.path;})) return;
+        _images.push_back(img);
+    }
     inline void removeImage(const QString& path) override {
         _images.erase(std::remove_if(_images.begin(), _images.end(), [&](Image& img){return img.path == path;}));
     }
+    inline void setRating(QString path, int rating) override { queryRefByPath(path).rating = rating; }
 
 private:
     inline bool matchesFilter(const Image& img, const Filter& f) {

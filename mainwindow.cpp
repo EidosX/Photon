@@ -4,6 +4,7 @@
 #include "mainimg.h"
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include "Star.h"
 
 MainWindow::MainWindow(AppState& appState, QWidget *parent)
     : QMainWindow(parent)
@@ -14,6 +15,9 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     ui->mainHorizontalLayout->insertWidget(0, new MainImg(_appState, this));
 
     connect(&appState, &AppState::onFilteredImagePathsChanged, this, &MainWindow::reloadCarousel);
+
+    for (int i = 1; i <= 5; ++i)
+        ui->starsLayout->addWidget(new Star(_appState, i, this));
 
     auto placeholder = new QWidget(this);
     placeholder->setMinimumHeight(PreviewImg::HEIGHT);

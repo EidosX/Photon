@@ -19,13 +19,24 @@ signals:
     void onSelectedImageChanged();
 
 public slots:
-    inline void setSelectedImage(std::optional<Image> img) { _selectedImage = std::move(img); emit onSelectedImageChanged(); }
+    inline void setSelectedImage(std::optional<Image> img) { _selectedImage = std::move(img); updateSelectedImage(); }
     inline void addImage(const Image& img) { _db->addImage(img); updateFilteredImages(); }
+
+    inline void setSelectedImageRating(int rating) {
+        _db->setRating(_selectedImage->path, rating);
+        updateFilteredImages();
+        updateSelectedImage();
+    }
 
 private:
     inline void updateFilteredImages() {
         _filteredImages = _db->query(_filters);
         emit onFilteredImagePathsChanged();
+    }
+    inline void updateSelectedImage() {
+        if (!_selectedImage.has_value()) return;
+        _selectedImage = _db->queryByPath(_selectedImage->path);
+        emit onSelectedImageChanged();
     }
 
     std::vector<Filter> _filters;
