@@ -9,6 +9,7 @@ class PreviewImg : public QWidget
 {
     Q_OBJECT
 public:
+    inline static int HEIGHT = 100;
     explicit PreviewImg(Image img, AppState& appState, QWidget *parent = nullptr);
 
     inline void setSelected(bool selected) { _selected = selected; repaint(); }
@@ -25,7 +26,7 @@ public slots:
 private:
     Image _image;
     QPixmap _img;
-    int _width, _height = 100;
+    int _width, _height = HEIGHT;
     bool _selected = false;
     AppState& _appState;
 };

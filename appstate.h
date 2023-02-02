@@ -1,6 +1,7 @@
 #ifndef APPSTATE_H
 #define APPSTATE_H
 
+#include <QDebug>
 #include <QObject>
 #include "db.h"
 
@@ -18,17 +19,16 @@ signals:
     void onSelectedImageChanged();
 
 public slots:
-    inline void setSelectedImage(std::optional<Image> img) {
-        _selectedImage = std::move(img);
-        emit onSelectedImageChanged();
-    }
+    inline void setSelectedImage(std::optional<Image> img) { _selectedImage = std::move(img); emit onSelectedImageChanged(); }
+    inline void addImage(const Image& img) { _db->addImage(img); updateFilteredImages(); }
 
 private:
-    inline void setFilteredImages(std::vector<Image> images) {
-        _filteredImages = std::move(images);
+    inline void updateFilteredImages() {
+        _filteredImages = _db->query(_filters);
         emit onFilteredImagePathsChanged();
     }
 
+    std::vector<Filter> _filters;
     std::unique_ptr<Database> _db;
     std::vector<Image> _filteredImages;
     std::optional<Image> _selectedImage;

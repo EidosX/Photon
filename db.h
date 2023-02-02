@@ -8,6 +8,8 @@ struct RatingFilter { int min = 0; };
 using Filter = std::variant<TagFilter, RatingFilter>;
 
 struct Image {
+    inline Image(QString path) : path(path) {}
+
     QString path;
     std::vector<QString> tags;
     int rating;

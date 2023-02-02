@@ -17,12 +17,6 @@ int main(int argc, char *argv[])
       "C:/Users/Eidos/Pictures/download.png",
       "C:/Users/Eidos/Pictures/Screenshots/Screenshot_20230118_161438.png"
     };
-    for (auto& path : exampleImages) {
-        auto img = Image();
-        img.path = path;
-        img.rating = 4;
-        db->addImage(img);
-    }
 
     auto appState = AppState(std::move(db));
 

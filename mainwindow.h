@@ -19,6 +19,10 @@ public:
 public slots:
     void reloadCarousel();
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+
 private:
     Ui::MainWindow *ui;
     AppState& _appState;

@@ -5,13 +5,11 @@
 Carousel::Carousel(QWidget *parent)
     : QScrollArea{parent}
 {
-
 }
 
-void Carousel::wheelEvent(QWheelEvent *event)
-{
-    auto rotate = [](const QPoint& point) {return QPoint(point.y(), point.x());};
+QPoint rotate(const QPoint& p) { return QPoint(p.y(), p.x()); }
 
+void Carousel::wheelEvent(QWheelEvent *event) {
     auto* newEvent = new QWheelEvent(event->position(), event->globalPosition(),
                                   rotate(event->pixelDelta()), rotate(event->angleDelta()),
                                   event->buttons(), event->modifiers(),
