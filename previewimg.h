@@ -10,10 +10,11 @@ class PreviewImg : public QWidget
     Q_OBJECT
 public:
     inline static int HEIGHT = 100;
-    explicit PreviewImg(Image img, AppState& appState, QWidget *parent = nullptr);
+    explicit PreviewImg(QString path, AppState& appState, QWidget *parent = nullptr);
 
     inline void setSelected(bool selected) { _selected = selected; repaint(); }
-    inline Image getImage() { return _image; }
+    inline Image getImage() { return _appState.getDatabase()->queryByPath(_imagePath); }
+    inline QString getPath() { return _imagePath; }
 
 protected:
     QSize sizeHint() const override;
@@ -24,7 +25,7 @@ public slots:
     void reloadSelected();
 
 private:
-    Image _image;
+    QString _imagePath;
     QPixmap _img;
     int _width, _height = HEIGHT;
     bool _selected = false;

@@ -33,7 +33,8 @@ public slots:
 protected:
     inline void mousePressEvent(QMouseEvent*) override {
         if (!_appState.getSelectedImage().has_value()) return;
-        _appState.setSelectedImageRating(_number);
+        int newRating = _appState.getSelectedImage()->rating == _number ? 0 : _number;
+        _appState.setSelectedImageRating(newRating);
     }
 
 private:

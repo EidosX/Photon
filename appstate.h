@@ -14,12 +14,18 @@ public:
     inline const std::optional<Image>& getSelectedImage() { return _selectedImage; }
     inline const std::vector<Image>& getFilteredImages() { return _filteredImages; }
 
+    inline std::unique_ptr<Database>& getDatabase() { return _db; }
+
 signals:
     void onFilteredImagePathsChanged();
     void onSelectedImageChanged();
 
 public slots:
-    inline void setSelectedImage(std::optional<Image> img) { _selectedImage = std::move(img); updateSelectedImage(); }
+    inline void setSelectedImage(QString path) {
+        if (path.isEmpty()) _selectedImage = {};
+        else _selectedImage = _db->queryByPath(path);
+        updateSelectedImage();
+    }
     inline void addImage(const Image& img) { _db->addImage(img); updateFilteredImages(); }
 
     inline void setSelectedImageRating(int rating) {
@@ -34,8 +40,7 @@ private:
         emit onFilteredImagePathsChanged();
     }
     inline void updateSelectedImage() {
-        if (!_selectedImage.has_value()) return;
-        _selectedImage = _db->queryByPath(_selectedImage->path);
+        if (_selectedImage.has_value()) _selectedImage = _db->queryByPath(_selectedImage->path);
         emit onSelectedImageChanged();
     }
 

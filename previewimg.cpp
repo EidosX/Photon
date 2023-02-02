@@ -3,8 +3,8 @@
 #include <QPainter>
 #include <QPainterPath>
 
-PreviewImg::PreviewImg(Image img, AppState& appState, QWidget *parent)
-    : QWidget{parent}, _image(std::move(img)), _img(_image.path), _appState(appState)
+PreviewImg::PreviewImg(QString path, AppState& appState, QWidget *parent)
+    : QWidget{parent}, _imagePath(std::move(path)), _img(_imagePath), _appState(appState)
 {
     double ratio = _height / (double) _img.height();
     _width = (int) (_img.width() * ratio);
@@ -33,10 +33,10 @@ void PreviewImg::paintEvent(QPaintEvent* e) {
 }
 
 void PreviewImg::mousePressEvent(QMouseEvent*) {
-    if (!_selected) _appState.setSelectedImage(_image);
+    if (!_selected) _appState.setSelectedImage(_imagePath);
     else _appState.setSelectedImage({});
 }
 
 void PreviewImg::reloadSelected() {
-    setSelected(_appState.getSelectedImage().has_value() && _image.path == _appState.getSelectedImage()->path);
+    setSelected(_appState.getSelectedImage().has_value() && _imagePath == _appState.getSelectedImage()->path);
 }

@@ -16,6 +16,8 @@ MainImg::MainImg(AppState& appState, QWidget *parent)
 }
 
 void MainImg::setPath(QString path) {
+    if (path == _path) return;
+    _path = path;
     _img = path.isEmpty() ? std::nullopt : std::optional(QPixmap(path));
     repaint();
 }

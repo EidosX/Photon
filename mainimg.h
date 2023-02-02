@@ -18,6 +18,7 @@ signals:
 
 private:
     std::optional<QPixmap> _img = {};
+    QString _path;
     AppState& _appState;
 };
 
