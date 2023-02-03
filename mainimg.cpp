@@ -5,14 +5,10 @@
 #include <QPaintEvent>
 #include <QPainterPath>
 
-MainImg::MainImg(AppState& appState, QWidget *parent)
-    : QWidget{parent}, _appState(appState)
+MainImg::MainImg(QWidget *parent)
+    : QWidget{parent}
 {
-    connect(&appState, &AppState::onSelectedImageChanged, this, [&](){
-        if (_appState.getSelectedImage().has_value())
-            setPath(_appState.getSelectedImage()->path);
-        else setPath("");
-    });
+
 }
 
 void MainImg::setPath(QString path) {

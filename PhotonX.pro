@@ -18,7 +18,7 @@ SOURCES += \
     previewimg.cpp
 
 HEADERS += \
-    Star.h \
+    star.h \
     appstate.h \
     carousel.h \
     db.h \

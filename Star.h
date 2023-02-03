@@ -1,45 +1,30 @@
 #ifndef STAR_H
 #define STAR_H
 
-#include "appstate.h"
 #include <QLabel>
 
 class Star : public QLabel
 {
     Q_OBJECT
 public:
-    inline Star(AppState& appState, int number, QWidget* parent)
-        : QLabel(parent), _number(number), _appState(appState)
+    inline Star(QWidget* parent)
+        : QLabel(parent)
     {
         setCursor(Qt::PointingHandCursor);
-        setMaximumSize(20, 20);
-        setMinimumSize(20, 20);
         setScaledContents(true);
-        update();
-        connect(&_appState, &AppState::onSelectedImageChanged, this, &Star::update);
+        enable(true);
     }
 
+signals:
+    void clicked();
+
+public slots:
     inline void enable(bool enabled) {
         setPixmap(QPixmap(enabled ? ":/res/star.png" : ":/res/star_greyed.png"));
     }
 
-public slots:
-    inline void update() {
-        int currentStarsCount = _appState.getSelectedImage().has_value()
-                ? _appState.getSelectedImage().value().rating : 0;
-        enable(_number <= currentStarsCount);
-    }
-
 protected:
-    inline void mousePressEvent(QMouseEvent*) override {
-        if (!_appState.getSelectedImage().has_value()) return;
-        int newRating = _appState.getSelectedImage()->rating == _number ? 0 : _number;
-        _appState.setSelectedImageRating(newRating);
-    }
-
-private:
-    int _number;
-    AppState& _appState;
+    inline void mousePressEvent(QMouseEvent*) override { emit clicked(); }
 };
 
 #endif // STAR_H

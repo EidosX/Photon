@@ -3,14 +3,13 @@
 #include <QPainter>
 #include <QPainterPath>
 
-PreviewImg::PreviewImg(QString path, AppState& appState, QWidget *parent)
-    : QWidget{parent}, _imagePath(std::move(path)), _img(_imagePath), _appState(appState)
+PreviewImg::PreviewImg(QString path, QWidget *parent)
+    : QWidget{parent}, _imagePath(std::move(path)), _img(_imagePath)
 {
     double ratio = _height / (double) _img.height();
     _width = (int) (_img.width() * ratio);
     setMinimumSize(_width, _height);
     setCursor(Qt::PointingHandCursor);
-    connect(&appState, &AppState::onSelectedImageChanged, this, &PreviewImg::reloadSelected);
 }
 
 QSize PreviewImg::sizeHint() const {
@@ -30,13 +29,4 @@ void PreviewImg::paintEvent(QPaintEvent* e) {
         painter.setPen(QPen(QColor(0x0000C2FF), 4));
         painter.drawPath(clipPath);
     }
-}
-
-void PreviewImg::mousePressEvent(QMouseEvent*) {
-    if (!_selected) _appState.setSelectedImage(_imagePath);
-    else _appState.setSelectedImage({});
-}
-
-void PreviewImg::reloadSelected() {
-    setSelected(_appState.getSelectedImage().has_value() && _imagePath == _appState.getSelectedImage()->path);
 }

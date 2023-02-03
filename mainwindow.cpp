@@ -4,7 +4,7 @@
 #include "mainimg.h"
 #include <QDragEnterEvent>
 #include <QMimeData>
-#include "Star.h"
+#include "star.h"
 
 MainWindow::MainWindow(AppState& appState, QWidget *parent)
     : QMainWindow(parent)
@@ -12,12 +12,30 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
 {
     ui->setupUi(this);
     setAcceptDrops(true);
-    ui->mainHorizontalLayout->insertWidget(0, new MainImg(_appState, this));
+
+    connect(&appState, &AppState::onSelectedImageChanged, ui->mainImg, [this](){
+        if (_appState.getSelectedImage().has_value())
+            ui->mainImg->setPath(_appState.getSelectedImage()->path);
+        else ui->mainImg->setPath("");
+    });
 
     connect(&appState, &AppState::onFilteredImagePathsChanged, this, &MainWindow::reloadCarousel);
 
-    for (int i = 1; i <= 5; ++i)
-        ui->starsLayout->addWidget(new Star(_appState, i, this));
+    auto starWidgets = ui->starsWidget->findChildren<Star*>();
+    for (int i = 1; i <= 5; ++i) {
+        auto* star = starWidgets[i-1];
+        connect(&appState, &AppState::onSelectedImageChanged, star, [this, i, star](){
+            int currentStarsCount = _appState.getSelectedImage().has_value()
+                    ? _appState.getSelectedImage().value().rating : 0;
+            star->enable(i <= currentStarsCount);
+        });
+
+        connect(star, &Star::clicked, star, [this, i](){
+            if (!_appState.getSelectedImage().has_value()) return;
+            int newRating = _appState.getSelectedImage()->rating == i ? 0 : i;
+            _appState.setSelectedImageRating(newRating);
+        });
+    }
 
     auto placeholder = new QWidget(this);
     placeholder->setMinimumHeight(PreviewImg::HEIGHT);
@@ -48,7 +66,14 @@ void MainWindow::reloadCarousel() {
 
     // Fill the missing images
     for (size_t j = i; j < newSelection.size(); ++j) {
-        auto* w = new PreviewImg(newSelection[j].path, _appState, this);
+        auto* w = new PreviewImg(newSelection[j].path, this);
+        connect(&_appState, &AppState::onSelectedImageChanged, w, [this, w](){
+            w->setSelected(_appState.getSelectedImage().has_value() && w->getPath() == _appState.getSelectedImage()->path);
+        });
+        connect(w, &PreviewImg::clicked, w, [this, w](){
+            if (!w->isSelected()) _appState.setSelectedImage(w->getPath());
+            else _appState.setSelectedImage({});
+        });
         ui->carouselLayout->insertWidget(ui->carouselLayout->count()-2, w);
     }
 
