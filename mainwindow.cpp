@@ -98,6 +98,10 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event) {
 
 void MainWindow::dropEvent(QDropEvent *event) {
     auto paths = event->mimeData()->urls();
-    for (const auto& path : paths)
-        _appState.addImage(Image(path.path().sliced(1)));
+    for (const auto& path : paths){
+        // Qt returns /C:/Users/... instead of C:/Users... on Windows
+        auto p = path.path();
+        p = p[2] == ':' ? p.sliced(1) : p;
+        _appState.addImage(Image(p));
+    }
 }
