@@ -34,6 +34,9 @@ public slots:
         updateSelectedImage();
     }
 
+    inline void addTag(QString path, QString tag) { _db->addTag(path, tag); updateFilteredImages(); updateSelectedImage(); }
+    inline void removeTag(QString path, QString tag) { _db->removeTag(path, tag); updateFilteredImages(); updateSelectedImage(); }
+
 private:
     inline void updateFilteredImages() {
         _filteredImages = _db->query(_filters);

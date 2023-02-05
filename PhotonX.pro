@@ -24,7 +24,8 @@ HEADERS += \
     db.h \
     mainimg.h \
     mainwindow.h \
-    previewimg.h
+    previewimg.h \
+    tag.h
 
 FORMS += \
     mainwindow.ui

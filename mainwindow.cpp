@@ -5,6 +5,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include "star.h"
+#include "tag.h"
 
 MainWindow::MainWindow(AppState& appState, QWidget *parent)
     : QMainWindow(parent)
@@ -43,6 +44,26 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     ui->carouselLayout->addStretch(0);
 
     reloadCarousel();
+
+    auto* addTagBtn = new TagButton("Add Tag");
+    connect(addTagBtn, &QPushButton::clicked, &_appState, [this](){
+        if (!_appState.getSelectedImage().has_value()) return;
+        _appState.addTag(_appState.getSelectedImage()->path, "TEST");
+    });
+    ui->currTagsScrollLayout->insertWidget(0, addTagBtn);
+
+
+    connect(&appState, &AppState::onSelectedImageChanged, ui->currTagsScrollContents, [this](){
+        while (auto* w = ui->currTagsScrollContents->findChild<Tag*>()) delete w;
+        if (!_appState.getSelectedImage().has_value()) return;
+        for (auto& t : _appState.getSelectedImage()->tags) {
+            auto* tag = new Tag(t, this);
+            connect(tag, &Tag::delBtnClicked, &_appState, [this, t](){
+                _appState.removeTag(_appState.getSelectedImage()->path, t);
+            });
+            ui->currTagsScrollLayout->insertWidget(ui->currTagsScrollLayout->count() - 2, tag);
+        }
+    });
 }
 
 MainWindow::~MainWindow()

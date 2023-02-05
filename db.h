@@ -26,6 +26,8 @@ public slots:
     virtual void addImage(const Image& img) = 0;
     virtual void removeImage(const QString& path) = 0;
     virtual void setRating(QString path, int rating) = 0;
+    virtual void addTag(QString path, QString tag) = 0;
+    virtual void removeTag(QString path, QString tag) = 0;
 };
 
 class VectorDatabase : public Database {
@@ -54,6 +56,13 @@ public slots:
         _images.erase(std::remove_if(_images.begin(), _images.end(), [&](Image& img){return img.path == path;}));
     }
     inline void setRating(QString path, int rating) override { queryRefByPath(path).rating = rating; }
+
+    inline void addTag(QString path, QString tag) override { queryRefByPath(path).tags.push_back(tag); }
+
+    inline void removeTag(QString path, QString tag) override {
+        auto& tags = queryRefByPath(path).tags;
+        tags.erase(std::remove_if(tags.begin(), tags.end(), [&](QString& t){return t == tag;}));
+    }
 
 private:
     inline bool matchesFilter(const Image& img, const Filter& f) {
