@@ -25,6 +25,7 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
 
     connect(&appState, &AppState::onFilteredImagePathsChanged, this, &MainWindow::reloadCarousel);
 
+    //Ratig stars
     auto starWidgets = ui->starsWidget->findChildren<Star*>();
     for (int i = 1; i <= 5; ++i) {
         auto* star = starWidgets[i-1];
@@ -48,6 +49,7 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
 
     reloadCarousel();
 
+    //Tags Button
     auto* addTagBtn = new TagButton("Add Tag");
     connect(addTagBtn, &QPushButton::clicked, &_appState, [this](){
         if (!_appState.getSelectedImage().has_value()) return;
@@ -58,6 +60,7 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
         }
         _appState.addTag(_appState.getSelectedImage()->path, tagName);
     });
+
     ui->currTagsScrollLayout->insertWidget(0, addTagBtn);
 
     connect(&appState, &AppState::onSelectedImageChanged, ui->currTagsScrollContents, [this](){
@@ -70,6 +73,11 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
             });
             ui->currTagsScrollLayout->insertWidget(ui->currTagsScrollLayout->count() - 2, tag);
         }
+    });
+
+    //Add description
+    connect(ui->descBtn, &QPushButton::clicked, &_appState, [this](){
+        _appState.setDescription(_appState.getSelectedImage()->path,ui->descField->toPlainText());
     });
 }
 

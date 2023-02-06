@@ -814,7 +814,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="descBtn">
            <property name="minimumSize">
             <size>
              <width>100</width>
