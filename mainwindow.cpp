@@ -3,6 +3,8 @@
 #include "previewimg.h"
 #include "mainimg.h"
 #include <QDragEnterEvent>
+#include <QInputDialog>
+#include <QMessageBox>
 #include <QMimeData>
 #include "star.h"
 #include "tag.h"
@@ -48,10 +50,14 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     auto* addTagBtn = new TagButton("Add Tag");
     connect(addTagBtn, &QPushButton::clicked, &_appState, [this](){
         if (!_appState.getSelectedImage().has_value()) return;
-        _appState.addTag(_appState.getSelectedImage()->path, "TEST");
+        auto tagName = QInputDialog::getText(this, "Add Tag", "Enter tag name: ");
+        if (tagName.size() < 1) {
+            (new QMessageBox(QMessageBox::Critical, "Error", "Tag name must not be empty"))->show();
+            return;
+        }
+        _appState.addTag(_appState.getSelectedImage()->path, tagName);
     });
     ui->currTagsScrollLayout->insertWidget(0, addTagBtn);
-
 
     connect(&appState, &AppState::onSelectedImageChanged, ui->currTagsScrollContents, [this](){
         while (auto* w = ui->currTagsScrollContents->findChild<Tag*>()) delete w;
