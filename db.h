@@ -11,6 +11,7 @@ struct Image {
     inline Image(QString path) : path(path) {}
 
     QString path;
+    QString description;
     std::vector<QString> tags;
     int rating = 0;
 };
@@ -20,15 +21,25 @@ class Database : public QObject {
 public:
     // Returns all the images in the database that match the given filters
     virtual std::vector<Image> query(const std::vector<Filter>& filters) = 0;
+    // Returns the image with the given path
     virtual Image queryByPath(QString path) = 0;
 
 public slots:
+    // Adds a new image
     virtual void addImage(const Image& img) = 0;
+    // Removes an image
     virtual void removeImage(const QString& path) = 0;
+    // Sets the rating of the image with the given path
     virtual void setRating(QString path, int rating) = 0;
+    // Adds a given tag to the image with the given path
     virtual void addTag(QString path, QString tag) = 0;
+    // Removes the given tag from the image with the given path
     virtual void removeTag(QString path, QString tag) = 0;
+    // Sets description for the image with given path
+    virtual void setDescription(QString path, QString description) = 0;
 };
+
+
 
 class VectorDatabase : public Database {
     Q_OBJECT
@@ -63,6 +74,8 @@ public slots:
         auto& tags = queryRefByPath(path).tags;
         tags.erase(std::remove_if(tags.begin(), tags.end(), [&](QString& t){return t == tag;}));
     }
+
+    inline void setDescription(QString path, QString description) override { queryRefByPath(path).description = description; }
 
 private:
     inline bool matchesFilter(const Image& img, const Filter& f) {
