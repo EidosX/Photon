@@ -39,7 +39,11 @@ public slots:
     virtual void setDescription(QString path, QString description) = 0;
 };
 
+/*
+class SQLiteDb : public Database {
 
+};
+*/
 
 class VectorDatabase : public Database {
     Q_OBJECT

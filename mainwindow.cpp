@@ -17,9 +17,10 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     setAcceptDrops(true);
 
     connect(&appState, &AppState::onSelectedImageChanged, ui->mainImg, [this](){
-        if (_appState.getSelectedImage().has_value())
+        if (_appState.getSelectedImage().has_value()){
             ui->mainImg->setPath(_appState.getSelectedImage()->path);
-        else ui->mainImg->setPath("");
+            ui->descField->setPlainText(_appState.getSelectedImage()->description);
+        } else ui->mainImg->setPath("");
     });
 
     connect(&appState, &AppState::onFilteredImagePathsChanged, this, &MainWindow::reloadCarousel);
