@@ -15,6 +15,8 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     , ui(new Ui::MainWindow), _appState(appState)
 {
     ui->setupUi(this);
+    setWindowTitle("Photon");
+    QCoreApplication::setApplicationName("Photon");
     setAcceptDrops(true);
 
     // Change main image on selection
@@ -26,9 +28,10 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
 
     // Change description on selection
     connect(&appState, &AppState::onSelectedImageChanged, ui->descField, [this](){
-        if (_appState.getSelectedImage().has_value())
+        if (_appState.getSelectedImage().has_value()) {
+            if (_appState.getSelectedImage()->description == ui->descField->toPlainText()) return;
             ui->descField->setPlainText(_appState.getSelectedImage()->description);
-        else ui->descField->setPlainText("");
+        } else ui->descField->setPlainText("");
     });
 
     // Change current image description on edit

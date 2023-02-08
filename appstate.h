@@ -31,25 +31,25 @@ public slots:
 
     inline void setSelectedImageRating(int rating) {
         _db->setRating(_selectedImage->path, rating);
-        updateFilteredImages();
         updateSelectedImage();
+        updateFilteredImages();
     }
 
     inline void addTag(QString path, QString tag) {
         _db->addTag(path, tag);
-        updateFilteredImages();
         updateSelectedImage();
+        updateFilteredImages();
     }
     inline void removeTag(QString path, QString tag) {
         _db->removeTag(path, tag);
-        updateFilteredImages();
         updateSelectedImage();
+        updateFilteredImages();
     }
 
     inline void setDescription(QString path, QString description) {
         _db->setDescription(path, description);
-        updateFilteredImages();
         updateSelectedImage();
+        updateFilteredImages();
     }
 
     inline void addFilter(const Filter& f) { _filters.push_back(f); updateFilteredImages(); }
