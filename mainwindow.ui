@@ -457,7 +457,8 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: #3E4144;
-color: white;</string>
+color: white;
+border-radius: 8px;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -490,9 +491,7 @@ color: white;</string>
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: #282A2C;
-border-radius: 8px;
-</string>
+         <string notr="true">background-color: #282A2C;</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="spacing">
@@ -707,7 +706,9 @@ border-radius: 8px;
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">* { border: none; }
+            <string notr="true">* {
+    border: none;
+}
 QScrollBar:horizontal {
     height: 6px;
 }

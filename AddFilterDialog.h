@@ -24,6 +24,7 @@ public:
         auto* l = new QVBoxLayout(this);
 
         auto* textInput = new QLineEdit(this);
+        textInput->setPlaceholderText("Enter a tag name");
         connect(textInput, &QLineEdit::textEdited, this, [this](const QString& newText){ _name = newText; });
         l->addWidget(textInput);
     }

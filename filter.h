@@ -23,7 +23,8 @@ inline bool matchesFilter(const Image& img, const Filter& f) {
     // On verifie que l'image contient bien le tag
     try {
         QString tag = std::get<TagFilter>(f).tag;
-        if (std::find(img.tags.begin(), img.tags.end(), tag) == img.tags.end()) return false;
+        if (std::find_if(img.tags.begin(), img.tags.end(), [tag](const QString& t){ return tag.toLower() == t.toLower(); }) == img.tags.end())
+            return false;
     } catch (const std::bad_variant_access& ex) {}
 
     // On verifie que l'image a un rating suffisamment elevé
