@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include "star.h"
+#include "addfilterdialog.h"
 #include "tag.h"
 
 MainWindow::MainWindow(AppState& appState, QWidget *parent)
@@ -47,6 +48,8 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
 
     reloadCarousel();
 
+    // Current image tags
+
     auto* addTagBtn = new TagButton("Add Tag");
     connect(addTagBtn, &QPushButton::clicked, &_appState, [this](){
         if (!_appState.getSelectedImage().has_value()) return;
@@ -63,13 +66,30 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
         while (auto* w = ui->currTagsScrollContents->findChild<Tag*>()) delete w;
         if (!_appState.getSelectedImage().has_value()) return;
         for (auto& t : _appState.getSelectedImage()->tags) {
-            auto* tag = new Tag(t, this);
+            auto* tag = new Tag(QString("#").append(t), this);
             connect(tag, &Tag::delBtnClicked, &_appState, [this, t](){
                 _appState.removeTag(_appState.getSelectedImage()->path, t);
             });
             ui->currTagsScrollLayout->insertWidget(ui->currTagsScrollLayout->count() - 2, tag);
         }
     });
+
+    // Carousel filters
+    auto* addFilterBtn = new TagButton("Add Filter", this);
+    connect(addFilterBtn, &QPushButton::clicked, &_appState, [this](){
+        auto* dialog = new AddFilterDialog(this);
+        dialog->exec();
+        if (!dialog->getResult().has_value()) return;
+        auto filter = dialog->getResult().value();
+        _appState.addFilter(filter);
+        auto* filterWidget = filterToWidget(filter, this);
+        connect(filterWidget, &Tag::delBtnClicked, this, [this, filter, filterWidget](){
+            _appState.removeFilter(filter);
+            delete filterWidget;
+        });
+        ui->galleryFiltersLayout->insertWidget(3, filterWidget);
+    });
+    ui->galleryFiltersLayout->addWidget(addFilterBtn);
 }
 
 MainWindow::~MainWindow()

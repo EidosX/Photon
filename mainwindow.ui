@@ -807,7 +807,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="galleryLabel">
          <property name="font">
           <font>
            <pointsize>12</pointsize>

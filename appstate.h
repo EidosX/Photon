@@ -51,6 +51,12 @@ public slots:
         updateSelectedImage();
     }
 
+    inline void addFilter(const Filter& f) { _filters.push_back(f); updateFilteredImages(); }
+    inline void removeFilter(const Filter& f) {
+        _filters.erase(std::remove_if(_filters.begin(), _filters.end(), [&](Filter& f1){return filterEquals(f, f1);}));
+        updateFilteredImages();
+    }
+
 private:
     inline void updateFilteredImages() {
         _filteredImages = _db->query(_filters);

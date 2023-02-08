@@ -2,19 +2,8 @@
 #define DATABASE_H
 
 #include <QObject>
-
-struct TagFilter { QString tag; };
-struct RatingFilter { int min = 0; };
-using Filter = std::variant<TagFilter, RatingFilter>;
-
-struct Image {
-    inline Image(QString path) : path(path) {}
-
-    QString path;
-    QString description;
-    std::vector<QString> tags;
-    int rating = 0;
-};
+#include "filter.h"
+#include "image.h"
 
 class Database : public QObject {
     Q_OBJECT
@@ -78,22 +67,6 @@ public slots:
     inline void setDescription(QString path, QString description) override { queryRefByPath(path).description = description; }
 
 private:
-    inline bool matchesFilter(const Image& img, const Filter& f) {
-        // On verifie que l'image contient bien le tag
-        try {
-            QString tag = std::get<TagFilter>(f).tag;
-            if (std::find(img.tags.begin(), img.tags.end(), tag) == img.tags.end()) return false;
-        } catch (const std::bad_variant_access& ex) {}
-
-        // On verifie que l'image a un rating suffisamment elevé
-        try {
-            int minRating = std::get<RatingFilter>(f).min;
-            if (minRating > img.rating) return false;
-        } catch (const std::bad_variant_access& ex) {}
-
-        return true;
-    }
-
     std::vector<Image> _images;
 };
 

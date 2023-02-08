@@ -10,7 +10,7 @@ class Tag : public QWidget
 {
     Q_OBJECT
 public:
-    inline explicit Tag(QString name, QWidget *parent = nullptr) : QWidget(parent) {
+    inline Tag(QString name, QWidget *parent = nullptr, QString color = "#6CB3DC", QString delBtnColor = "#9BD2F1") : QWidget(parent) {
         auto* hl = new QHBoxLayout(this);
         hl->setContentsMargins(10, 0, 0, 0);
         hl->setSpacing(8);
@@ -22,13 +22,15 @@ public:
         hl->addWidget(label);
 
         delBtn = new QPushButton("X", this);
-        delBtn->setStyleSheet("color: black; background-color: #9BD2F1; padding: 1px; width: 20px; height: 20px; ");
+        delBtn->setStyleSheet(QString("color: black; background-color: ")
+                              .append(delBtnColor)
+                              .append("; padding: 1px; width: 20px; height: 20px; "));
         delBtn->setCursor(Qt::PointingHandCursor);
         connect(delBtn, &QPushButton::clicked, this, &Tag::delBtnClicked);
         hl->addWidget(delBtn);
 
         setAttribute(Qt::WA_StyledBackground, true);
-        setStyleSheet("background-color: #6CB3DC;");
+        setStyleSheet(QString("background-color: ").append(color).append(";"));
     }
 
 protected:

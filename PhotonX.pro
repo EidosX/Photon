@@ -18,6 +18,9 @@ SOURCES += \
     previewimg.cpp
 
 HEADERS += \
+    addfilterdialog.h \
+    filter.h \
+    image.h \
     star.h \
     appstate.h \
     carousel.h \
