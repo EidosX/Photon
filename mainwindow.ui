@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>703</width>
-    <height>419</height>
+    <height>600</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>600</height>
+   </size>
   </property>
   <property name="palette">
    <palette>
@@ -484,9 +490,15 @@ border-radius: 8px;</string>
       </item>
       <item>
        <widget class="QWidget" name="listWidget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>190</width>
+          <width>250</width>
           <height>16777215</height>
          </size>
         </property>
@@ -734,7 +746,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>158</width>
+              <width>218</width>
               <height>32</height>
              </rect>
             </property>
@@ -775,6 +787,56 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
              </item>
             </layout>
            </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="styleSheet">
+            <string notr="true">color: white;
+</string>
+           </property>
+           <property name="text">
+            <string>Description</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="descField">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color:white;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="descBtn">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::RightToLeft</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color : white;
+color: black;</string>
+           </property>
+           <property name="text">
+            <string>Save</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -884,7 +946,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
          <x>0</x>
          <y>0</y>
          <width>679</width>
-         <height>32</height>
+         <height>28</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="carouselLayout">
