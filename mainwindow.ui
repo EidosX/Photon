@@ -507,7 +507,7 @@ border-radius: 8px;</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="spacing">
-          <number>8</number>
+          <number>12</number>
          </property>
          <property name="leftMargin">
           <number>16</number>
@@ -790,17 +790,6 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label">
-           <property name="styleSheet">
-            <string notr="true">color: white;
-</string>
-           </property>
-           <property name="text">
-            <string>Description</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPlainTextEdit" name="descField">
            <property name="maximumSize">
             <size>
@@ -809,33 +798,10 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color:white;</string>
+            <string notr="true"/>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="descBtn">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::RightToLeft</enum>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color : white;
-color: black;</string>
-           </property>
-           <property name="text">
-            <string>Save</string>
+           <property name="placeholderText">
+            <string>Enter a description here</string>
            </property>
           </widget>
          </item>
@@ -851,6 +817,29 @@ color: black;</string>
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QPushButton" name="deleteBtn">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #BE4A4A;</string>
+             </property>
+             <property name="text">
+              <string>Delete</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -946,7 +935,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
          <x>0</x>
          <y>0</y>
          <width>679</width>
-         <height>28</height>
+         <height>32</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="carouselLayout">

@@ -17,25 +17,47 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     ui->setupUi(this);
     setAcceptDrops(true);
 
+    // Change main image on selection
     connect(&appState, &AppState::onSelectedImageChanged, ui->mainImg, [this](){
-        if (_appState.getSelectedImage().has_value()){
+        if (_appState.getSelectedImage().has_value())
             ui->mainImg->setPath(_appState.getSelectedImage()->path);
-            ui->descField->setPlainText(_appState.getSelectedImage()->description);
-        } else ui->mainImg->setPath("");
+        else ui->mainImg->setPath("");
     });
 
+    // Change description on selection
+    connect(&appState, &AppState::onSelectedImageChanged, ui->descField, [this](){
+        if (_appState.getSelectedImage().has_value())
+            ui->descField->setPlainText(_appState.getSelectedImage()->description);
+        else ui->descField->setPlainText("");
+    });
+
+    // Change current image description on edit
+    connect(ui->descField, &QPlainTextEdit::textChanged, &_appState, [this](){
+        if (!_appState.getSelectedImage().has_value()) return;
+        if (_appState.getSelectedImage()->description == ui->descField->toPlainText()) return;
+        _appState.setDescription(_appState.getSelectedImage()->path,ui->descField->toPlainText());
+    });
+
+    connect(ui->deleteBtn, &QPushButton::clicked, &_appState, [this](){
+        if (!_appState.getSelectedImage().has_value()) return;
+        _appState.removeImage(_appState.getSelectedImage()->path);
+    });
+
+    // Reload carousel when filtered images change
     connect(&appState, &AppState::onFilteredImagePathsChanged, this, &MainWindow::reloadCarousel);
 
-    //Ratig stars
+    // Rating stars
     auto starWidgets = ui->starsWidget->findChildren<Star*>();
     for (int i = 1; i <= 5; ++i) {
         auto* star = starWidgets[i-1];
+        // Change number of stars when selected image changes
         connect(&appState, &AppState::onSelectedImageChanged, star, [this, i, star](){
             int currentStarsCount = _appState.getSelectedImage().has_value()
                     ? _appState.getSelectedImage().value().rating : 0;
             star->enable(i <= currentStarsCount);
         });
 
+        // Changes image's rating when user clicks the stars
         connect(star, &Star::clicked, star, [this, i](){
             if (!_appState.getSelectedImage().has_value()) return;
             int newRating = _appState.getSelectedImage()->rating == i ? 0 : i;
@@ -43,6 +65,7 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
         });
     }
 
+    // A placeholder preview image so that the carousel always has the right height
     auto placeholder = new QWidget(this);
     placeholder->setMinimumHeight(PreviewImg::HEIGHT);
     ui->carouselLayout->addWidget(placeholder);
@@ -52,6 +75,7 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
 
     // Current image tags
 
+    // Button to add a tag to an image
     auto* addTagBtn = new TagButton("Add Tag");
     connect(addTagBtn, &QPushButton::clicked, &_appState, [this](){
         if (!_appState.getSelectedImage().has_value()) return;
@@ -62,9 +86,9 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
         }
         _appState.addTag(_appState.getSelectedImage()->path, tagName);
     });
-
     ui->currTagsScrollLayout->insertWidget(0, addTagBtn);
 
+    // Change tags when selected image changes
     connect(&appState, &AppState::onSelectedImageChanged, ui->currTagsScrollContents, [this](){
         while (auto* w = ui->currTagsScrollContents->findChild<Tag*>()) delete w;
         if (!_appState.getSelectedImage().has_value()) return;
@@ -93,12 +117,6 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
         ui->galleryFiltersLayout->insertWidget(3, filterWidget);
     });
     ui->galleryFiltersLayout->addWidget(addFilterBtn);
-    
-    //Add description
-    connect(ui->descBtn, &QPushButton::clicked, &_appState, [this](){
-        if (!_appState.getSelectedImage().has_value()) return;
-        _appState.setDescription(_appState.getSelectedImage()->path,ui->descField->toPlainText());
-    });
 }
 
 MainWindow::~MainWindow()

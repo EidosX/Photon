@@ -46,7 +46,7 @@ inline Tag* filterToWidget(const Filter& f, QWidget* parent) {
 
         auto stars = QString("");
         for (int i = 0; i < rating.min; ++i) stars = stars.append("⭐");
-        return new Tag(QString("Min. ").append(stars), parent);
+        return new Tag(QString("Min. ").append(stars), parent, "#AB6CDC", "#CC96F5");
     } catch (const std::bad_variant_access& ex) {}
     throw std::runtime_error("No variant matches???");
 }

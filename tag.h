@@ -46,7 +46,7 @@ class TagButton : public QPushButton {
 public:
     inline explicit TagButton(QString name, QWidget* parent = nullptr) : QPushButton(parent) {
         setText(name);
-        setStyleSheet("background-color: white; padding: 0 10px; color : black;");
+        setStyleSheet("background-color: white; padding: 3px 10px; color : black;");
         setCursor(Qt::PointingHandCursor);
     }
 
