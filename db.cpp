@@ -15,6 +15,29 @@ SQLiteDatabase::SQLiteDatabase(const QString& dbPath) {
         qDebug() << "Could not connect to SQLite database!";
         return;
     }
+
+    auto query = QSqlQuery();
+    query.prepare(R"'(
+        CREATE TABLE IF NOT EXISTS Images (
+            path VARCHAR NOT NULL PRIMARY KEY,
+            description VARCHAR DEFAULT "",
+            rating INT NOT NULL,
+            corner_tl INT,
+            corner_tr INT,
+            corner_br INT,
+            corner_bl INT
+        );
+    )'");
+    if (!query.exec()) qDebug() << "SQL Database Error:" << query.lastError();
+    query.prepare(R"'(
+        CREATE TABLE IF NOT EXISTS Tags (
+            name VARCHAR,
+            path VARCHAR REFERENCES Images (path) ON DELETE CASCADE,
+            PRIMARY KEY (name, path)
+        );
+    )'");
+    if (!query.exec()) qDebug() << "SQL Database Error:" << query.lastError();
+
     qDebug() << "SQLite connection successful";
 }
 
