@@ -66,13 +66,10 @@ public:
         dropdown->addItem("Tag");
         dropdown->addItem("Min. Rating");
         auto updateCurrentForm = [this, l, dropdown](){
-            qDebug() << "1";
             if (_currentForm != nullptr) delete _currentForm;
-            qDebug() << "2";
             if (dropdown->currentIndex() == 0) _currentForm = new TagForm();
             else if (dropdown->currentIndex() == 1) _currentForm = new MinRatingForm();
             else throw std::runtime_error("No matching index!");
-            qDebug() << "3";
             l->insertWidget(1, _currentForm);
         };
         connect(dropdown, &QComboBox::activated, this, updateCurrentForm);
