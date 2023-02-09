@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #include <QObject>
+#include <QSqlDatabase>
 #include "filter.h"
 #include "image.h"
 
@@ -28,41 +29,40 @@ public slots:
     virtual void setDescription(QString path, QString description) = 0;
 };
 
+class SQLiteDatabase : public Database {
+    Q_OBJECT
+public:
+    SQLiteDatabase(const QString& dbPath);
+    std::vector<Image> query(const std::vector<Filter>& filters) override;
+    Image queryByPath(QString path) override;
+
+public slots:
+    void addImage(const Image& img) override;
+    void removeImage(const QString& path) override;
+    void setRating(QString path, int rating) override;
+    void addTag(QString path, QString tag) override;
+    void removeTag(QString path, QString tag) override;
+    void setDescription(QString path, QString description) override;
+
+private:
+    QSqlDatabase _db;
+
+};
+
 class VectorDatabase : public Database {
     Q_OBJECT
 public:
-    inline std::vector<Image> query(const std::vector<Filter>& filters) override {
-        std::vector<Image> l;
-        for (const auto& img : _images) {
-            if (std::all_of(filters.cbegin(), filters.cend(), [&](const Filter& f){ return matchesFilter(img, f); }))
-                l.push_back(img);
-        }
-        return l;
-    }
-    inline Image queryByPath(QString path) override { return queryRefByPath(path); }
-    inline Image& queryRefByPath(QString path) {
-        for (Image& img : _images) if (img.path == path) return img;
-        throw std::runtime_error("Path not found");
-    }
+    std::vector<Image> query(const std::vector<Filter>& filters) override;
+    Image queryByPath(QString path) override;
+    Image& queryRefByPath(QString path);
 
 public slots:
-    inline void addImage(const Image& img) override {
-        if (std::any_of(_images.begin(), _images.end(), [&](Image& x){return x.path == img.path;})) return;
-        _images.push_back(img);
-    }
-    inline void removeImage(const QString& path) override {
-        _images.erase(std::remove_if(_images.begin(), _images.end(), [&](Image& img){return img.path == path;}));
-    }
-    inline void setRating(QString path, int rating) override { queryRefByPath(path).rating = rating; }
-
-    inline void addTag(QString path, QString tag) override { queryRefByPath(path).tags.push_back(tag); }
-
-    inline void removeTag(QString path, QString tag) override {
-        auto& tags = queryRefByPath(path).tags;
-        tags.erase(std::remove_if(tags.begin(), tags.end(), [&](QString& t){return t == tag;}));
-    }
-
-    inline void setDescription(QString path, QString description) override { queryRefByPath(path).description = description; }
+    void addImage(const Image& img) override;
+    void removeImage(const QString& path) override;
+    void setRating(QString path, int rating) override;
+    void addTag(QString path, QString tag) override;
+    void removeTag(QString path, QString tag) override;
+    void setDescription(QString path, QString description) override;
 
 private:
     std::vector<Image> _images;

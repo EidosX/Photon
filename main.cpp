@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    auto db = std::make_unique<VectorDatabase>();
+    auto db = std::make_unique<SQLiteDatabase>("photon.db");
     auto appState = AppState(std::move(db));
 
     auto w = MainWindow(appState);

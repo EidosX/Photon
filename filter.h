@@ -12,10 +12,10 @@ using Filter = std::variant<TagFilter, RatingFilter>;
 inline bool filterEquals(const Filter& f1, const Filter& f2) {
     try {
         return std::get<TagFilter>(f1).tag == std::get<TagFilter>(f2).tag;
-    } catch (const std::bad_variant_access& ex) {}
+    } catch (...) {}
     try {
         return std::get<RatingFilter>(f1).min == std::get<RatingFilter>(f2).min;
-    } catch (const std::bad_variant_access& ex) {}
+    } catch (...) {}
     return false;
 }
 
@@ -25,13 +25,13 @@ inline bool matchesFilter(const Image& img, const Filter& f) {
         QString tag = std::get<TagFilter>(f).tag;
         if (std::find_if(img.tags.begin(), img.tags.end(), [tag](const QString& t){ return tag.toLower() == t.toLower(); }) == img.tags.end())
             return false;
-    } catch (const std::bad_variant_access& ex) {}
+    } catch (...) {}
 
     // On verifie que l'image a un rating suffisamment elevé
     try {
         int minRating = std::get<RatingFilter>(f).min;
         if (minRating > img.rating) return false;
-    } catch (const std::bad_variant_access& ex) {}
+    } catch (...) {}
 
     return true;
 }
@@ -40,14 +40,14 @@ inline Tag* filterToWidget(const Filter& f, QWidget* parent) {
     try {
         auto tag = std::get<TagFilter>(f);
         return new Tag(QString("#").append(tag.tag), parent);
-    } catch (const std::bad_variant_access& ex) {}
+    } catch (...) {}
     try {
         auto rating = std::get<RatingFilter>(f);
 
         auto stars = QString("");
         for (int i = 0; i < rating.min; ++i) stars = stars.append("⭐");
         return new Tag(QString("Min. ").append(stars), parent, "#AB6CDC", "#CC96F5");
-    } catch (const std::bad_variant_access& ex) {}
+    } catch (...) {}
     throw std::runtime_error("No variant matches???");
 }
 

@@ -18,6 +18,13 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     setWindowTitle("Photon");
     QCoreApplication::setApplicationName("Photon");
     setAcceptDrops(true);
+    ui->descField->setAcceptDrops(false);
+
+    // Hide metadata panel when no image is selected
+    connect(&appState, &AppState::onSelectedImageChanged, ui->metadataWidget, [this](){
+        for (auto* w : ui->metadataWidget->findChildren<QWidget*>())
+            w->setVisible(_appState.getSelectedImage().has_value());
+    });
 
     // Change main image on selection
     connect(&appState, &AppState::onSelectedImageChanged, ui->mainImg, [this](){

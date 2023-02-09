@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>703</width>
+    <width>900</width>
     <height>600</height>
    </rect>
   </property>
@@ -489,7 +489,7 @@ border-radius: 8px;</string>
        <widget class="MainImg" name="mainImg" native="true"/>
       </item>
       <item>
-       <widget class="QWidget" name="listWidget" native="true">
+       <widget class="QWidget" name="metadataWidget" native="true">
         <property name="minimumSize">
          <size>
           <width>250</width>
@@ -934,7 +934,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>679</width>
+         <width>876</width>
          <height>32</height>
         </rect>
        </property>

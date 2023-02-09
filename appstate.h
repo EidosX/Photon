@@ -27,7 +27,7 @@ public slots:
         updateSelectedImage();
     }
     inline void addImage(const Image& img) { _db->addImage(img); updateFilteredImages(); }
-    inline void removeImage(const QString& path) { setSelectedImage(""); _db->removeImage(path); updateFilteredImages(); }
+    inline void removeImage(const QString& path) { _db->removeImage(path); setSelectedImage(""); updateFilteredImages(); }
 
     inline void setSelectedImageRating(int rating) {
         _db->setRating(_selectedImage->path, rating);
