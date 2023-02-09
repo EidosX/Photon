@@ -8,18 +8,27 @@
 MainImg::MainImg(QWidget *parent)
     : QWidget{parent}
 {
-
+    auto* l = new QHBoxLayout(this);
+    _noImageSelectedLabel = new QLabel("No image selected");
+    auto font = QFont(_noImageSelectedLabel->font());
+    font.setPointSize(48);
+    _noImageSelectedLabel->setFont(font);
+    _noImageSelectedLabel->setStyleSheet("color: #82848A;");
+    l->addStretch();
+    l->addWidget(_noImageSelectedLabel);
+    l->addStretch();
 }
 
 void MainImg::setPath(QString path) {
     if (path == _path) return;
+    _noImageSelectedLabel->setVisible(false);
     _path = path;
     _img = path.isEmpty() ? std::nullopt : std::optional(QPixmap(path));
     repaint();
 }
 
 void MainImg::paintEvent(QPaintEvent *e) {
-    if (!_img.has_value()) return;
+    if (!_img.has_value()) { _noImageSelectedLabel->setVisible(true); return; }
 
     int imgW = _img->width(),
         imgH = _img->height();

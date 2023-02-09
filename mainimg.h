@@ -2,6 +2,7 @@
 #define MAINIMG_H
 
 #include <QWidget>
+#include <QLabel>
 
 class MainImg : public QWidget
 {
@@ -18,6 +19,7 @@ signals:
 private:
     std::optional<QPixmap> _img = {};
     QString _path;
+    QLabel* _noImageSelectedLabel;
 };
 
 #endif // MAINIMG_H
