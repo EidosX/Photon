@@ -48,8 +48,7 @@ public slots:
 
     inline void setDescription(QString path, QString description) {
         _db->setDescription(path, description);
-        updateSelectedImage();
-        updateFilteredImages();
+        // We do not update because change is instantanious in QPlainTextEdit
     }
 
     inline void addFilter(const Filter& f) { _filters.push_back(f); updateFilteredImages(); }
