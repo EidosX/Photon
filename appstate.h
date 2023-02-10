@@ -26,6 +26,9 @@ public:
     // that match the currently given filters.
     const std::vector<Image>& getFilteredImages();
 
+    // Returns the current filters
+    const std::vector<Filter>& getFilters();
+
 signals:
     // Emitted whenever the filtered images or their metadata may have changed
     void onFilteredImagePathsChanged();

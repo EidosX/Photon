@@ -18,6 +18,7 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     setWindowTitle("Photon");
     QCoreApplication::setApplicationName("Photon");
     setAcceptDrops(true);
+    ui->noMatchesTipLabel->setVisible(false);
     ui->descField->setAcceptDrops(false);
 
     // Hide metadata panel when no image is selected
@@ -183,7 +184,9 @@ void MainWindow::reloadCarousel() {
         ui->carouselLayout->insertWidget(ui->carouselLayout->count()-2, w);
     }
 
-    ui->dragAndDropTipLabel->setVisible(newSelection.empty());
+    ui->noImagesTipLabel->setVisible(newSelection.empty() && _appState.getFilters().empty());
+
+    ui->noMatchesTipLabel->setVisible(newSelection.empty() && !_appState.getFilters().empty());
 }
 
 bool isFileValid(const QUrl& url) {

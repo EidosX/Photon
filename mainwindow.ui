@@ -962,7 +962,20 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="dragAndDropTipLabel">
+         <widget class="QLabel" name="noMatchesTipLabel">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #82848A;</string>
+          </property>
+          <property name="text">
+           <string>No image matches the filters</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="noImagesTipLabel">
           <property name="styleSheet">
            <string notr="true">color: #82848A;</string>
           </property>

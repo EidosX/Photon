@@ -16,6 +16,10 @@ const std::vector<Image>& AppState::getFilteredImages() {
     return _filteredImages;
 }
 
+const std::vector<Filter>& AppState::getFilters() {
+    return _filters;
+}
+
 void AppState::setSelectedImage(QString path) {
     if (path.isEmpty()) _selectedImage = {};
     else _selectedImage = _db->queryByPath(path);
