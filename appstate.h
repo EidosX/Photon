@@ -53,6 +53,7 @@ public slots:
     inline void setCrop(const QString& path, std::optional<QRect> crop) {
         _db->setCrop(path, crop);
         updateSelectedImage();
+        updateFilteredImages();
     }
 
     inline void addFilter(const Filter& f) { _filters.push_back(f); updateFilteredImages(); }

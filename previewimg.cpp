@@ -3,9 +3,10 @@
 #include <QPainter>
 #include <QPainterPath>
 
-PreviewImg::PreviewImg(QString path, QWidget *parent)
-    : QWidget{parent}, _imagePath(std::move(path)), _img(_imagePath)
+PreviewImg::PreviewImg(QString path, QWidget *parent, std::optional<QRect> crop)
+    : QWidget{parent}, _imagePath(std::move(path)), _crop(crop), _img(_imagePath)
 {
+    if (_crop.has_value()) _img = _img.copy(*_crop);
     double ratio = _height / (double) _img.height();
     _width = (int) (_img.width() * ratio);
     setMinimumSize(_width, _height);
