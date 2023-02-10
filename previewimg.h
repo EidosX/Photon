@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+// This is the thumbnail image widget you see in the carousel at the bottom of the app.
+// Its peculiarity is that its width adjusts to the aspect ratio of the image, in order
+// to correspond to a fixed height.
 class PreviewImg : public QWidget
 {
     Q_OBJECT

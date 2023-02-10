@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QRect>
 
+// Image represents the local path of an image and its metadata.
 struct Image {
     inline Image(QString path) : path(path) {}
 

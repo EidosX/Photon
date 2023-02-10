@@ -6,6 +6,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
+// This is the widget that displays a removable tag.
+// It is also used to display filters.
 class Tag : public QWidget
 {
     Q_OBJECT
@@ -41,6 +43,7 @@ signals:
     void delBtnClicked();
 };
 
+// This is used by the Add Tag and the Add Filter buttons.
 class TagButton : public QPushButton {
     Q_OBJECT
 public:

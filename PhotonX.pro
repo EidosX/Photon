@@ -12,6 +12,7 @@ CONFIG += c++17
 TARGET = Photon
 
 SOURCES += \
+    addfilterdialog.cpp \
     appstate.cpp \
     carousel.cpp \
     db.cpp \

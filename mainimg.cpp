@@ -92,5 +92,6 @@ void MainImg::mouseMoveEvent(QMouseEvent* e) {
 }
 
 void MainImg::mouseReleaseEvent(QMouseEvent* e) {
+    (void) e;
     emit editingCropDone();
 }

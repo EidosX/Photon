@@ -5,6 +5,8 @@
 #include <QLabel>
 #include <image.h>
 
+// This is the main widget that displays the big sized image when you select one.
+// It has support for selecting a cropped region
 class MainImg : public QWidget
 {
     Q_OBJECT

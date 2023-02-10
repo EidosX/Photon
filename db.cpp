@@ -1,9 +1,9 @@
 #include "db.h"
 #include <QFile>
 #include <QStandardPaths>
-#include <QSQLQuery>
-#include <QSQLRecord>
-#include <QSQLError>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlError>
 
 // JSON file database
 

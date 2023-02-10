@@ -31,6 +31,9 @@ public slots:
     virtual void setCrop(const QString& path, std::optional<QRect> crop) = 0;
 };
 
+
+
+
 class SQLiteDatabase : public Database {
     Q_OBJECT
 public:

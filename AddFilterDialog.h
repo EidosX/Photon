@@ -6,10 +6,28 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include "filter.h"
-#include "star.h"
 
 #define ADDFILTERDIALOG_H
 
+class FilterForm;
+
+// This is the main dialog that will open when the user clicks the
+// 'New Label' button.
+class AddFilterDialog : public QDialog {
+    Q_OBJECT
+public:
+    AddFilterDialog(QWidget* parent = nullptr);
+
+    std::optional<Filter> getResult();
+
+private:
+    FilterForm* _currentForm = nullptr;
+};
+
+
+
+// Filter form is the base class of the forms inside the AddFilterDialog.
+// They represent a way for the user to input a certain type of filter.
 class FilterForm : public QWidget {
     Q_OBJECT
 public:
@@ -17,75 +35,26 @@ public:
     virtual std::optional<Filter> getResult() = 0;
 };
 
+// TagForm allows the user to specify a tag name
 class TagForm : public FilterForm {
     Q_OBJECT
 public:
-    inline TagForm(QWidget* parent = nullptr) : FilterForm(parent) {
-        auto* l = new QVBoxLayout(this);
-
-        auto* textInput = new QLineEdit(this);
-        textInput->setPlaceholderText("Enter a tag name");
-        connect(textInput, &QLineEdit::textEdited, this, [this](const QString& newText){ _name = newText; });
-        l->addWidget(textInput);
-    }
-    std::optional<Filter> getResult() override { return _name.isEmpty() ? std::nullopt : std::optional(TagFilter { _name }); }
+    TagForm(QWidget* parent = nullptr);
+    std::optional<Filter> getResult() override;
 private:
     QString _name;
 };
 
+// MinRatingForm allow the user to specify a minimum number of stars
 class MinRatingForm : public FilterForm {
     Q_OBJECT
 public:
-    inline MinRatingForm(QWidget* parent = nullptr) : FilterForm(parent) {
-        auto* l = new QHBoxLayout(this);
-        for (int i = 1; i <= 5; ++i) {
-            auto* star = new Star(this);
-            star->setMaximumSize(20, 20);
-            connect(star, &Star::clicked, this, [this, i](){ _stars = i; emit starsUpdated(); });
-            connect(this, &MinRatingForm::starsUpdated, star, [this, star, i](){ star->enable(_stars >= i); });
-            l->addWidget(star);
-        }
-    }
-    std::optional<Filter> getResult() override { return RatingFilter { _stars }; }
+    MinRatingForm(QWidget* parent = nullptr);
+    std::optional<Filter> getResult();
 signals:
     void starsUpdated();
 private:
     int _stars = 5;
-};
-
-class AddFilterDialog : public QDialog {
-    Q_OBJECT
-public:
-    inline std::optional<Filter> getResult() { return _currentForm->getResult(); }
-
-    inline AddFilterDialog(QWidget* parent = nullptr) : QDialog(parent) {
-        auto* l = new QVBoxLayout(this);
-        setLayout(l);
-
-        auto* dropdown = new QComboBox(this);
-        dropdown->addItem("Tag");
-        dropdown->addItem("Min. Rating");
-        auto updateCurrentForm = [this, l, dropdown](){
-            if (_currentForm != nullptr) delete _currentForm;
-            if (dropdown->currentIndex() == 0) _currentForm = new TagForm();
-            else if (dropdown->currentIndex() == 1) _currentForm = new MinRatingForm();
-            else throw std::runtime_error("No matching index!");
-            l->insertWidget(1, _currentForm);
-        };
-        connect(dropdown, &QComboBox::activated, this, updateCurrentForm);
-        l->addWidget(dropdown);
-
-        updateCurrentForm();
-        l->addWidget(_currentForm);
-
-        auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, this);
-        l->addWidget(buttonBox);
-        connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-        connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    }
-
-private:
-    FilterForm* _currentForm = nullptr;
 };
 
 #endif // ADDFILTERDIALOG_H

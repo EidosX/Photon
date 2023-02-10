@@ -704,7 +704,7 @@ border-radius: 8px;</string>
           </widget>
          </item>
          <item>
-          <widget class="QScrollArea" name="currTagsScroll">
+          <widget class="Carousel" name="currTagsScroll">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>

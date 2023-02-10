@@ -3,8 +3,8 @@
 
 #include <QLabel>
 
-class Star : public QLabel
-{
+// This is a single star widget, that can be clicked, enabled (gold) or disabled (greyed)
+class Star : public QLabel {
     Q_OBJECT
 public:
     inline Star(QWidget* parent)

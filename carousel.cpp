@@ -10,6 +10,7 @@ Carousel::Carousel(QWidget *parent)
 QPoint rotate(const QPoint& p) { return QPoint(p.y(), p.x()); }
 
 void Carousel::wheelEvent(QWheelEvent *event) {
+    // We convert vertical scroll into horizontal scroll
     auto* newEvent = new QWheelEvent(event->position(), event->globalPosition(),
                                   rotate(event->pixelDelta()), rotate(event->angleDelta()),
                                   event->buttons(), event->modifiers(),
