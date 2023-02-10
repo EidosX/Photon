@@ -27,6 +27,8 @@ public slots:
     virtual void removeTag(QString path, QString tag) = 0;
     // Sets description for the image with given path
     virtual void setDescription(QString path, QString description) = 0;
+    // Sets the crop for an image
+    virtual void setCrop(const QString& path, std::optional<QRect> crop) = 0;
 };
 
 class SQLiteDatabase : public Database {
@@ -43,6 +45,7 @@ public slots:
     void addTag(QString path, QString tag) override;
     void removeTag(QString path, QString tag) override;
     void setDescription(QString path, QString description) override;
+    void setCrop(const QString& path, std::optional<QRect> crop) override;
 
 private:
     QSqlDatabase _db;
@@ -63,6 +66,8 @@ public slots:
     void addTag(QString path, QString tag) override;
     void removeTag(QString path, QString tag) override;
     void setDescription(QString path, QString description) override;
+    void setCrop(const QString& path, std::optional<QRect> crop) override;
+
 
 private:
     std::vector<Image> _images;

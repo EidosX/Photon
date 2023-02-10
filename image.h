@@ -2,6 +2,7 @@
 #define IMAGE_H
 
 #include <QObject>
+#include <QRect>
 
 struct Image {
     inline Image(QString path) : path(path) {}
@@ -10,6 +11,7 @@ struct Image {
     QString description;
     std::vector<QString> tags;
     int rating = 0;
+    std::optional<QRect> crop;
 };
 
 

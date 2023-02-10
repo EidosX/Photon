@@ -30,9 +30,28 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
 
     // Change main image on selection
     connect(&appState, &AppState::onSelectedImageChanged, ui->mainImg, [this](){
-        if (_appState.getSelectedImage().has_value())
-            ui->mainImg->setPath(_appState.getSelectedImage()->path);
+        if (_appState.getSelectedImage().has_value()){
+            ui->mainImg->setPath(_appState.getSelectedImage()->path, _appState.getSelectedImage()->crop);
+        }
         else ui->mainImg->setPath("");
+    });
+
+    // Change crop when user edits it
+    connect(ui->mainImg, &MainImg::editingCropDone, &_appState, [this](){
+        QApplication::restoreOverrideCursor();
+        if (!_appState.getSelectedImage().has_value()) return;
+        ui->mainImg->setEditingCrop(false);
+        _appState.setCrop(_appState.getSelectedImage()->path, ui->mainImg->getCrop());
+    });
+
+    // Enter crop mode when user clicks the crop button
+    connect(ui->cropBtn, &QPushButton::clicked, ui->mainImg, [this](){
+        if (!_appState.getSelectedImage().has_value()) return;
+
+        QMessageBox::information(this, "Crop Mode", "Select an area on the image");
+        QApplication::setOverrideCursor(Qt::CrossCursor);
+        ui->mainImg->setPath(_appState.getSelectedImage()->path, {});
+        ui->mainImg->setEditingCrop(true);
     });
 
     // Change description on selection

@@ -22,10 +22,10 @@ SQLiteDatabase::SQLiteDatabase(const QString& dbPath) {
             path VARCHAR NOT NULL PRIMARY KEY,
             description VARCHAR DEFAULT "",
             rating INT NOT NULL,
-            corner_tl INT,
-            corner_tr INT,
-            corner_br INT,
-            corner_bl INT
+            cropX INT,
+            cropY INT,
+            cropW INT,
+            cropH INT
         );
     )'");
     if (!query.exec()) qDebug() << "SQL Database Error:" << query.lastError();
@@ -45,10 +45,10 @@ std::vector<Image> sqlToImages(QSqlQuery& q) {
     int pathRow = q.record().indexOf("Images.path");
     int descriptionRow = q.record().indexOf("Images.description");
     int ratingRow = q.record().indexOf("Images.rating");
-    // int cornerTlRow = q.record().indexOf("Images.corner_tl");
-    // int cornerTrRow = q.record().indexOf("Images.corner_tr");
-    // int cornerBrRow = q.record().indexOf("Images.corner_br");
-    // int cornerBlRow = q.record().indexOf("Images.corner_bl");
+    int cropXRow = q.record().indexOf("Images.cropX");
+    int cropYRow = q.record().indexOf("Images.cropY");
+    int cropWRow = q.record().indexOf("Images.cropW");
+    int cropHRow = q.record().indexOf("Images.cropH");
     int tagNameRow = q.record().indexOf("Tags.name");
 
     auto l = std::vector<Image>();
@@ -60,11 +60,13 @@ std::vector<Image> sqlToImages(QSqlQuery& q) {
             auto& img = l.emplace_back(path);
             img.description = q.value(descriptionRow).isNull() ? "" : q.value(descriptionRow).toString();
             img.rating = q.value(ratingRow).toInt();
-            // TODO: corners
-            // int cornerTl = q.value(cornerTlRow).isNull() ? -1 : q.value(cornerTlRow).toInt();
-            // int cornerTr = q.value(cornerTrRow).isNull() ? -1 : q.value(cornerTrRow).toInt();
-            // int cornerBr = q.value(cornerBrRow).isNull() ? -1 : q.value(cornerBrRow).toInt();
-            // int cornerBl = q.value(cornerBlRow).isNull() ? -1 : q.value(cornerBlRow).toInt();
+
+            int cropX = q.value(cropXRow).isNull() ? -1 : q.value(cropXRow).toInt();
+            int cropY = q.value(cropYRow).isNull() ? -1 : q.value(cropYRow).toInt();
+            int cropW = q.value(cropWRow).isNull() ? -1 : q.value(cropWRow).toInt();
+            int cropH = q.value(cropHRow).isNull() ? -1 : q.value(cropHRow).toInt();
+            if (cropX != -1 && cropY != -1 && cropW != -1 && cropH != -1)
+                img.crop = QRect(cropX, cropY, cropW, cropH);
         }
         if (!q.value(tagNameRow).isNull()) l.back().tags.push_back(q.value(tagNameRow).toString());
     }
@@ -166,6 +168,19 @@ void SQLiteDatabase::setDescription(QString path, QString description) {
     if (!query.exec()) qDebug() << "SQL Database Error:" << query.lastError();
 }
 
+void SQLiteDatabase::setCrop(const QString& path, std::optional<QRect> crop) {
+    auto query = QSqlQuery();
+    query.prepare("UPDATE Images "
+                  "SET cropX = (:cropX), cropY = (:cropY), cropW = (:cropW), cropH = (:cropH) "
+                  "WHERE path = (:path)");
+    query.bindValue(":cropX", crop->x());
+    query.bindValue(":cropY", crop->y());
+    query.bindValue(":cropW", crop->width());
+    query.bindValue(":cropH", crop->height());
+    query.bindValue(":path", path);
+    if (!query.exec()) qDebug() << "SQL Database Error:" << query.lastError();
+}
+
 
 
 
@@ -213,4 +228,9 @@ void VectorDatabase::removeTag(QString path, QString tag) {
 
 void VectorDatabase::setDescription(QString path, QString description) {
     queryRefByPath(path).description = description;
+}
+
+void VectorDatabase::setCrop(const QString& path, std::optional<QRect> crop) {
+    auto& ref = queryRefByPath(path);
+    ref.crop = crop;
 }

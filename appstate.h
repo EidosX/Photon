@@ -50,6 +50,10 @@ public slots:
         _db->setDescription(path, description);
         // We do not update because change is instantanious in QPlainTextEdit
     }
+    inline void setCrop(const QString& path, std::optional<QRect> crop) {
+        _db->setCrop(path, crop);
+        updateSelectedImage();
+    }
 
     inline void addFilter(const Filter& f) { _filters.push_back(f); updateFilteredImages(); }
     inline void removeFilter(const Filter& f) {
