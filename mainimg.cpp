@@ -14,9 +14,8 @@ MainImg::MainImg(QWidget *parent)
     font.setPointSize(48);
     _noImageSelectedLabel->setFont(font);
     _noImageSelectedLabel->setStyleSheet("color: #82848A;");
-    l->addStretch();
+    _noImageSelectedLabel->setAlignment(Qt::AlignCenter);
     l->addWidget(_noImageSelectedLabel);
-    l->addStretch();
 }
 
 void MainImg::setPath(QString path) {

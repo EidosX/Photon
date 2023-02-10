@@ -21,10 +21,12 @@ MainWindow::MainWindow(AppState& appState, QWidget *parent)
     ui->descField->setAcceptDrops(false);
 
     // Hide metadata panel when no image is selected
-    connect(&appState, &AppState::onSelectedImageChanged, ui->metadataWidget, [this](){
+    auto updateMetadataIsVisible = [this](){
         for (auto* w : ui->metadataWidget->findChildren<QWidget*>())
             w->setVisible(_appState.getSelectedImage().has_value());
-    });
+    };
+    updateMetadataIsVisible();
+    connect(&appState, &AppState::onSelectedImageChanged, ui->metadataWidget, updateMetadataIsVisible);
 
     // Change main image on selection
     connect(&appState, &AppState::onSelectedImageChanged, ui->mainImg, [this](){
@@ -161,7 +163,7 @@ void MainWindow::reloadCarousel() {
         ui->carouselLayout->insertWidget(ui->carouselLayout->count()-2, w);
     }
 
-    emit _appState.onSelectedImageChanged();
+    ui->dragAndDropTipLabel->setVisible(newSelection.empty());
 }
 
 bool isFileValid(const QUrl& url) {

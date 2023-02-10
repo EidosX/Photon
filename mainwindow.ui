@@ -935,7 +935,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
          <x>0</x>
          <y>0</y>
          <width>876</width>
-         <height>32</height>
+         <height>40</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="carouselLayout">
@@ -945,6 +945,19 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, QScrollBar::ad
         <property name="rightMargin">
          <number>0</number>
         </property>
+        <item>
+         <widget class="QLabel" name="dragAndDropTipLabel">
+          <property name="styleSheet">
+           <string notr="true">color: #82848A;</string>
+          </property>
+          <property name="text">
+           <string>Drag and drop image files to get started</string>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
